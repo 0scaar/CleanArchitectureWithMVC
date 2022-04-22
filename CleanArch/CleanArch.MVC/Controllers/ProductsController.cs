@@ -42,5 +42,72 @@ namespace CleanArch.MVC.Controllers
 
             return View(product);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var productVM = await productService.GetById(id);
+
+            if (productVM == null)
+                return NotFound();
+
+            return View(productVM);
+        }
+
+        [HttpPost]
+        public IActionResult Edit([Bind("Id,Name,Description,Price")] ProductViewModel product)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    productService.Update(product);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(product);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var productVM = await productService.GetById(id);
+
+            if (productVM == null)
+                return NotFound();
+
+            return View(productVM);
+        }
+
+        [HttpGet()]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var productVM = await productService.GetById(id);
+
+            if (productVM == null)
+                return NotFound();
+
+            return View(productVM);
+        }
+
+        [HttpPost(), ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            productService.Remove(id);
+            return RedirectToAction("Index");
+        }
     }
 }
