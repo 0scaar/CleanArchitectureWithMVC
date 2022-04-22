@@ -1,4 +1,5 @@
 ﻿using CleanArch.Application.Interfaces;
+using CleanArch.Application.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,25 @@ namespace CleanArch.MVC.Controllers
         {
             var result = await productService.GetProducts();
             return View(result);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create([Bind("Id,Name,Description,Price")] ProductViewModel product)
+        {
+            if (ModelState.IsValid)
+            {
+                productService.Add(product);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(product);
         }
     }
 }

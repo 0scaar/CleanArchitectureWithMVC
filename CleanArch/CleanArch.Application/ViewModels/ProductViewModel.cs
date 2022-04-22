@@ -15,13 +15,14 @@ namespace CleanArch.Application.ViewModels
         public string Name { get; set; }
 
         [Required(ErrorMessage = "The Description is Required")]
-        [MinLength(3)]
+        [MinLength(5, ErrorMessage = "The minimum is 5 letters")]
         [MaxLength(200)]
         [DisplayName("Description")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "The Price is Required")]
         [Range(1, 99999.99)]
+        [DisplayFormat(DataFormatString = "{0:C2}")]
         [DisplayName("Price")]
         public decimal Price { get; set; }
     }
